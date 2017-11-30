@@ -1,13 +1,13 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-const google = require("googleapis");
+const googleAPI = require("googleapis");
 
 const rights = require("./utils/rights");
 const behaviour = require("./utils/behaviour");
 const commands = require("./commands");
 const timezone = require("./timezone");
 const level = require("./level");
-const search = require("./google");
+const google = require("./google");
 
 const bot = new Discord.Client();
 
@@ -55,6 +55,7 @@ bot.on("ready", () => {
     level.load(bot.user.id, bot.guilds.first());
     behaviour.load();
     timezone.load();
+    google.load();
     commands.load();
 
     // Misc
@@ -82,7 +83,7 @@ bot.on('message', msg => {
         return;
 
     commands.process(msg);
-    search.process(msg);
+    google.process(msg);
 
 
     // Process experience

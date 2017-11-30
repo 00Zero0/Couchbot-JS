@@ -1,7 +1,7 @@
 const discord = require("discord.js");
-const fs = require("fs")
-const commands = require("./commands")
-const timezone = require("./timezone")
+const fs = require("fs");
+const commands = require("./commands");
+const timezone = require("./timezone");
 
 var Message = discord.Message;
 var TextChannel = discord.TextChannel;
