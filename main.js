@@ -1,11 +1,13 @@
 const Discord = require("discord.js");
 const fs = require("fs");
+const google = require("googleapis");
 
 const rights = require("./utils/rights");
 const behaviour = require("./utils/behaviour");
 const commands = require("./commands");
 const timezone = require("./timezone");
 const level = require("./level");
+const search = require("./google");
 
 const bot = new Discord.Client();
 
@@ -66,7 +68,7 @@ bot.on("ready", () => {
 bot.on('guildAddMember', member => {
     const channel = member.guild.channels.find('name', 'member-log');
     if (!channel) return;
-    
+
     channel.send(`Welcome to the server, ${member}`);
 });
 
@@ -80,6 +82,8 @@ bot.on('message', msg => {
         return;
 
     commands.process(msg);
+    search.process(msg);
+
 
     // Process experience
     if (!behaviour.is_xp_blocked(msg)) {

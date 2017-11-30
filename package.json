@@ -9,7 +9,8 @@
   "author": "Rares Ciorba",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.2.1"
+    "discord.js": "^11.2.1",
+    "googleapis": "^23.0.0"
   },
   "devDependencies": {
     "@types/node": "^8.0.34"

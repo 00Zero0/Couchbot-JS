@@ -9,6 +9,7 @@
 ### Dependencies:
 * Node.js
 * [Discord js](https://github.com/hydrabolt/discord.js)
+* [googleapis](https://github.com/google/google-api-nodejs-client/)
 ### Files needed:
 First of all, you need to create a folder called **config**, and add to it the following files:
 A file called "config.json" which contains the following:
@@ -24,6 +25,15 @@ Next, you'll need to set yourself permission to use the bot's commands like __!b
 {
 	"owners":["id1", "id2"],
 	"admins":["id3", "id4"]
+}
+```
+
+Next, you'll need to set the configurations for using google API. Create a file named "**google.json**" still inside the config folder and add following:
+
+```json
+{
+	"api_key" : "YOUR_GOOGLE_API_KEY",
+    "cx" : "YOUR_CX"
 }
 ```
 __Note__: Currently the ***admin*** is not *in use* meaning you should set yourself to be a owner so you'll have the higher permission.
