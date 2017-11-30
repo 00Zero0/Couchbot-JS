@@ -83,8 +83,6 @@ bot.on('message', msg => {
         return;
 
     commands.process(msg);
-    google.process(msg);
-
 
     // Process experience
     if (!behaviour.is_xp_blocked(msg)) {

@@ -35,6 +35,8 @@ module.exports = {
 
     load: function()
     {
-      commands.reg("!google", search, 2, 'Perform google search');
+      for(var key in commands) {
+        console.log(key + ", val: " + commands[key] + ", type: " + typeof(commands[key]));
+    }
     }
 }
