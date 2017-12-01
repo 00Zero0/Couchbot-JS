@@ -1,7 +1,6 @@
 const discord = require("discord.js");
 const rights = require("./utils/rights");
 const behaviour = require("./utils/behaviour");
-//const google = require("./google");
 
 // Globals
 var Message = discord.Message;
