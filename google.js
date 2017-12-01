@@ -12,40 +12,43 @@ var config = JSON.parse(fs.readFileSync('config/google.json', 'utf-8'));
 const CX = config.cx;
 const API_KEY = config.api_key;
 
-const START_SEARCH_INDEX = 0; //Use this if not specified by user
+const START_SEARCH_INDEX = 1; //Use this if not specified by user, 1 because google API start index is 1
 const LENGTH_SEARCH = 10; //Show max 10 results (0-9) by default
 
 function search(message)
 {
     content = message.content;
     //Get the search phrase written in between double qoutes
-    var re = /"([^']+)"/;
-    var searchPhrase = content.match(re)[1];
-    var start = START_SEARCH_INDEX;
-    var length = LENGTH_SEARCH;
-    //TO DO :: Get the number of results wanted (start index, length)
-    /*var start = content.match(/<([^']+)-/)[1] - 1;
-    var length = content.match(/-([^']+)>/)[1];
-    console.log('Start = ' + start);
-    console.log('Length = ' + length);*/
-    customsearch.cse.list({ cx: CX, q: searchPhrase, auth: API_KEY }, function (err, resp) {
+    var re = /"([^]+)"/;
+    var searchPhrase = content.match(re)?content.match(re)[1]:"";
+    if(searchPhrase.length<1)
+    {
+      message.channel.send('Syntax Incorrect!');
+      return;
+    }
+
+    var startI = START_SEARCH_INDEX;
+    startI = content.match(/-([0-9]+)/)?content.match(/-([0-9]+)/)[1]:START_SEARCH_INDEX; //Get the search starting index
+    startI = parseInt(startI, 10);
+    if(startI<1 || startI>100)
+      startI = START_SEARCH_INDEX;
+
+    customsearch.cse.list({ cx: CX, q: searchPhrase, 
+                          auth: API_KEY, c2coff: 1,
+                          filter: 1, googlehost: "google.com", 
+                          hl: "en", start: startI, num: LENGTH_SEARCH
+                         }, function (err, resp) {
     if (err) {
       return console.log('An error occured in Google Search', err);
     }
-    /**
-     * Got the response from custom search
-     */
-    //If invalid points are given reset them
-    if(start<0 || !start)
-      start = START_SEARCH_INDEX;
-    if(!length || length==0)
-      length = LENGTH_SEARCH>resp.searchInformation.formattedTotalResults?resp.searchInformation.formattedTotalResults:LENGTH_SEARCH;
 
-    //Creating embed
-    let messageTitle = '*Search Results from ' + start + ' to ' + (start + length) + '*';
+    /**Got Response
+      *Creating embed
+      */
+    let messageTitle = '*Search Results from ' + startI + ' to ' + (startI + LENGTH_SEARCH - 1) + '*';
     let messageEmbed = "";
-    let messageFooter = '* Total Results = ' + resp.searchInformation.formattedTotalResults + ' *';
-    for(var i = start; i<length;i++)
+    let messageFooter = 'Total Results = ' + resp.searchInformation.formattedTotalResults;
+    for(var i = 0; i<LENGTH_SEARCH;i++)
       {
         messageEmbed +=  '**' + resp.items[i].title + '** :: ' + resp.items[i].link + '\n';
       }
@@ -58,6 +61,8 @@ function search(message)
 
     if(embed)
       message.channel.send(embed);
+    else
+      console.log('Google Search : Embed could not be created.');
     });
 }
 
