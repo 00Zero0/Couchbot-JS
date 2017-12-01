@@ -36,6 +36,7 @@ Next, you'll need to set the configurations for using google API. Create a file 
     "cx" : "YOUR_CX"
 }
 ```
+
  And at last, create a folder named **data** in the root folder
 __Note__: Currently the ***admin*** is not *in use* meaning you should set yourself to be a owner so you'll have the higher permission.
 
