@@ -24,7 +24,7 @@ var LEVEL_RANDOM_VALUE_MIN = 15;
 var LEVEL_RANDOM_VALUE_MAX = 40;
 var LEVEL_TIMER = 300 * 1000; // 5 minutes
 
-var SAVE_INTERVAL = 60 * 60 * 1000; // an hour
+var SAVE_INTERVAL = 1 * 60 * 1000; // an hour
 
 var LEVEL_RANK_UP = 10;
 
@@ -214,7 +214,8 @@ function newRankNotification(user, guild) {
     else {
         let channel = guild.channels.find("id", notificationChannel);
         channel.send(embed);
-        channel.send("Congratulations " + author + " !");
+        if(embed)
+            channel.send("Congratulations " + author + " !");
     }   
         
 }
