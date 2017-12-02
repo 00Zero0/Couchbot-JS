@@ -82,8 +82,8 @@ bot.on('message', msg => {
     // Don't process if the message is from a bot
     if (msg.author.bot)
     {
-        if(msg.content=='Compiling please wait........')
-            msg.delete(500);
+        if(msg.content.startsWith('Compiling'))
+            msg.delete(1.2 * 1000);
         return;
     }
 

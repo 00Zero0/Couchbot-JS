@@ -20,7 +20,7 @@ const lan_supp =
 function runcode(message)
 {
     content = message.content;
-    var regex = /```((cpp)|(cpp11)|(c)|(conjure)|(cs)|(java)|(js)|(haskel)|(perl)|(py)|(php)|(ruby))/;
+    var regex = /```((cpp11)|(cpp)|(cs)|(conjure)|(c)|(java)|(js)|(haskel)|(perl)|(py)|(php)|(ruby))/;
     var lan = content.match(regex);
     if(!lan)
     {
@@ -81,10 +81,7 @@ function runcode(message)
         //
         if(compileObj.compile_status != 'OK'){
             embed.setTitle('COMPILATION ERROR::');
-            var messageDis='';
-            for(i in resp.errors)
-                messageDis += compileObj.errors[i] +'\n';
-            embed.setDescription(messageDis);
+            embed.setDescription(compileObj.compile_status);
             embed.setColor([225, 0, 0]);
 
             if(embed)
@@ -100,10 +97,7 @@ function runcode(message)
         var resultObj = compileObj.run_status;
         if(resultObj.status != 'AC'){
             embed.setTitle('RUN TIME ERROR::');
-            var messageDis;
-            for(i in resp.errors)
-                messageDis += compileObj.errors[i] +'\n';
-            embed.setDescription(messageDis);
+            embed.setDescription(resultObj.status);
             embed.setColor([225, 0, 0]);
 
             if(embed)
@@ -123,7 +117,7 @@ function runcode(message)
         }
         else
         {
-        embed.setFooter('Time taken : ' + resultObj.time_used +' and Memory used : ' + resultObj.memory_used);
+        embed.setFooter('Time taken : ' + resultObj.time_used +' and Memory used : ' + resultObj.memory_used + 'bytes');
         embed.setDescription(resultObj.output);
         }
         embed.setColor([0, 225, 0]);
