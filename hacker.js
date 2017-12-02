@@ -14,7 +14,7 @@ const runner = new hackerEarth(SECRET_KEY_H, 0);
 
 const lan_supp = 
 [
-    'cpp', 'cpp11', 'c', 'conjure', 'cs', 'java', 'js', 'haskel', 'perl', 'py', 'php', 'ruby'
+    'cpp', 'cpp11', 'c', 'conjure', 'csharp', 'java', 'javascript', 'haskel', 'perl', 'python', 'php', 'ruby'
 ];
 
 function runcode(message)
@@ -38,12 +38,31 @@ function runcode(message)
     code = code[1];
     code = code.replace(lan, '');
 
+    message.channel.send('Compiling please wait........');
+
+    var lan_code = '';
+    switch(lan)
+    {
+        case 'cpp': lan_code = lan_supp[0].toUpperCase(); break;
+        case 'cpp11': lan_code = lan_supp[1].toUpperCase(); break;
+        case 'c': lan_code = lan_supp[2].toUpperCase(); break;      
+        case 'conjure': lan_code = lan_supp[3].toUpperCase(); break;
+        case 'cs': lan_code = lan_supp[4].toUpperCase(); break;
+        case 'java': lan_code = lan_supp[5].toUpperCase(); break;
+        case 'js': lan_code = lan_supp[6].toUpperCase(); break;
+        case 'haskel': lan_code = lan_supp[7].toUpperCase(); break;
+        case 'perl': lan_code = lan_supp[8].toUpperCase(); break;
+        case 'py': lan_code = lan_supp[9].toUpperCase(); break;
+        case 'php': lan_code = lan_supp[10].toUpperCase(); break;
+        case 'ruby': lan_code = lan_supp[11].toUpperCase(); break;
+    }
+
     data = {
         'time_limit':5,
         'memory_limit':323244,
         'source': code,
         'input' : '',
-        'language': lan
+        'language': lan_code
     };
 
     runner.run(data, function(err, resp)
@@ -79,7 +98,6 @@ function runcode(message)
         //RUNTIME ERROR OCCURED
         //
         var resultObj = compileObj.run_status;
-        console.log(resultObj);
         if(resultObj.status != 'AC'){
             embed.setTitle('RUN TIME ERROR::');
             var messageDis;

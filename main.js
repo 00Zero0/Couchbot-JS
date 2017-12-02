@@ -81,7 +81,11 @@ bot.on('guildAddMember', member => {
 bot.on('message', msg => {
     // Don't process if the message is from a bot
     if (msg.author.bot)
+    {
+        if(msg.content=='Compiling please wait........')
+            msg.delete(500);
         return;
+    }
 
     commands.process(msg);
 
