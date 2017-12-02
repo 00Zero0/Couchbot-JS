@@ -20,7 +20,7 @@ function searchweb(message)
 {
     content = message.content;
     //Get the search phrase written in between double qoutes
-    var re = /"([^])+"/;
+    var re = /"([^]+)"/;
     var searchPhrase = content.match(re)?content.match(re)[1]:"";
     if(searchPhrase.length<1)
     {
@@ -37,6 +37,7 @@ function searchweb(message)
     customsearch.cse.list({ cx: CX, q: searchPhrase, 
                           auth: API_KEY, c2coff: 1,
                           filter: 1, googlehost: "google.com", 
+                          safe: "high",
                           hl: "en", start: startI, num: LENGTH_SEARCH
                          }, function (err, resp) {
     if (err) {
@@ -46,10 +47,17 @@ function searchweb(message)
     /**Got Response
       *Creating embed
       */
+    
     let messageTitle = '*Search Results from ' + startI + ' to ' + (startI + LENGTH_SEARCH - 1) + '*';
     let messageEmbed = "";
     let messageFooter = 'Total Results = ' + resp.searchInformation.formattedTotalResults;
-    for(var i = 0; i<LENGTH_SEARCH;i++)
+    var length = LENGTH_SEARCH>resp.searchInformation.formattedTotalResults?resp.searchInformation.formattedTotalResults:LENGTH_SEARCH;
+    if(length<0)
+    {
+      message.channel.send('No result');
+      return;
+    }
+    for(var i = 0; i<length;i++)
       {
         messageEmbed +=  '**' + resp.items[i].title + '** :: ' + resp.items[i].link + '\n';
       }
@@ -65,6 +73,7 @@ function searchweb(message)
     else
       console.log('Google Search : Embed could not be created.');
     });
+    
 }
 
 
@@ -72,7 +81,7 @@ function searchimage(message)
 {
   content = message.content;
   //Get the search phrase written in between double qoutes
-  var re = /"([^])+"/;
+  var re = /"([^]+)"/;
   var searchPhrase = content.match(re)?content.match(re)[1]:"";
   if(searchPhrase.length<1)
   {
@@ -89,6 +98,7 @@ function searchimage(message)
   customsearch.cse.list({ cx: CX, q: searchPhrase, 
     auth: API_KEY, c2coff: 1, searchType: 'image',
     filter: 1, googlehost: "google.com", 
+    safe: "high",
     hl: "en", start: startI, num: MAX_IMAGE_NUMBER
    }, function (err, resp) {
       if (err) {
@@ -100,11 +110,17 @@ function searchimage(message)
       */
       let messageDis = "";
       let messageFooter = 'Showing '+ MAX_IMAGE_NUMBER+ ' of ' + resp.searchInformation.formattedTotalResults + ' images.';
-      for(var i = 0; i<MAX_IMAGE_NUMBER;i++)
+      var length = MAX_IMAGE_NUMBER>resp.searchInformation.formattedTotalResults?resp.searchInformation.formattedTotalResults:MAX_IMAGE_NUMBER;
+      if(length<1)
+      {
+        message.channel.send('No result');
+        return;
+      }
+      for(var i = 0; i<length;i++)
       {
         messageDis +=  resp.items[i].link + '\n';
       }
-      s_message = messageDis + messageFooter;
+      var s_message = messageDis + messageFooter;
       message.channel.send(s_message);
 
       });

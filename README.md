@@ -5,11 +5,15 @@
 * Block/unblock command to remove verbose from specific channels.
 * Block/unblock commands for the xp counting.
 * Top and status commands for the level system
+* Setting up time for users
+* Google web and image search
+* Code compilation and running
 # Setup
 ### Dependencies:
 * Node.js
 * [Discord js](https://github.com/hydrabolt/discord.js)
 * [googleapis](https://github.com/google/google-api-nodejs-client/)
+* [Hacker Earth node js](https://github.com/tarungarg546/HackerEarth-node)
 ### Files needed:
 First of all, you need to create a folder called **config**, and add to it the following files:
 A file called "config.json" which contains the following:
@@ -34,6 +38,15 @@ Next, you'll need to set the configurations for using google API. Create a file 
 {
 	"api_key" : "YOUR_GOOGLE_API_KEY",
     "cx" : "YOUR_CX"
+}
+```
+
+Next, you'll need to set the configuration for Hacker Earth API. Create a file name "**compiler.json**" still inside the config folder and add following:
+
+```json
+{
+	"id" : "HACKER_EARTH_ID",
+	"secret_key" : "HACKER_EARTH_SECRET_KEY"
 }
 ```
 

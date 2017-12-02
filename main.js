@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-const googleAPI = require("googleapis");
 
 const rights = require("./utils/rights");
 const behaviour = require("./utils/behaviour");
@@ -8,6 +7,7 @@ const commands = require("./commands");
 const timezone = require("./timezone");
 const level = require("./level");
 const google = require("./google");
+const hacker = require("./hacker");
 
 const bot = new Discord.Client();
 
@@ -56,6 +56,7 @@ bot.on("ready", () => {
     behaviour.load();
     timezone.load();
     google.load();
+    hacker.load();
     commands.load();
 
     // Misc

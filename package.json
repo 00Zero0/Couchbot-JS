@@ -10,9 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^11.2.1",
-    "googleapis": "^23.0.0"
+    "googleapis": "^23.0.0",
+    "hackerearth-node": "^2.3.9"
   },
   "devDependencies": {
-    "@types/node": "^8.0.34"
+    "@types/node": "^8.0.34",
+    "babel-polyfill": "^6.26.0"
   }
 }

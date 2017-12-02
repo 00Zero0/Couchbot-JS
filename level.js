@@ -152,12 +152,18 @@ function get_data(author) {
     if(!time_data) {
         time = "Not set";
     } else {
-        let date = new Date;
-        let hours = date.getUTCHours() + time_data;
+        time_data = time_data[0].split(':');
+        var date = new Date;
+        var hours = parseInt(time_data[0], 10);
+        var minutes = date.getUTCMinutes() + parseInt(time_data[1], 10);
+        while(minutes >= 60) {
+            hours += 1;
+            minutes -= 60;
+        }
+        hours = date.getUTCHours() + hours;
         while(hours >= 24) {
             hours -= 24;
         }
-        let minutes = date.getUTCMinutes();
         time =  hours + ":" + (minutes < 10 ? "0": "") + minutes;
     }
 
@@ -213,9 +219,12 @@ function newRankNotification(user, guild) {
         author.send(embed);
     else {
         let channel = guild.channels.find("id", notificationChannel);
-        channel.send(embed);
-        if(embed)
-            channel.send("Congratulations " + author + " !");
+        if(channel)
+        {
+            channel.send(embed);
+            if(embed)
+                channel.send("Congratulations " + author + " !");
+        }
     }   
         
 }
