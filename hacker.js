@@ -27,7 +27,7 @@ function runcode(message)
         message.channel.send('This language in not supported, type !languages to get list of all suported languages');
         return;
     }
-
+    
     lan = lan[1];
     var code = content.match(/```([^]+)```/);
     if(!code)
@@ -37,9 +37,15 @@ function runcode(message)
     }
     code = code[1];
     code = code.replace(lan, '');
+    
+    var inputdata = content.match(/in`([^]+)`/);
+    if(!inputdata)
+        inputdata = '';
+    else
+        inputdata = inputdata[1];
 
-    message.channel.send('Compiling please wait........');
-
+    var sentMsgId = message.channel.send('Compiling please wait........');
+    
     var lan_code = '';
     switch(lan)
     {
@@ -61,7 +67,7 @@ function runcode(message)
         'time_limit':5,
         'memory_limit':323244,
         'source': code,
-        'input' : '',
+        'input' : inputdata,
         'language': lan_code
     };
 
@@ -85,7 +91,9 @@ function runcode(message)
             embed.setColor([225, 0, 0]);
 
             if(embed)
+            {
                 message.channel.send(embed);
+            }
             else
                 console.log('HACKER : Embed empty after compilation error!');
             return;
@@ -117,7 +125,7 @@ function runcode(message)
         }
         else
         {
-        embed.setFooter('Time taken : ' + resultObj.time_used +' and Memory used : ' + resultObj.memory_used + 'bytes');
+        embed.setFooter('Time taken : ' + resultObj.time_used +' and Memory used : ' + resultObj.memory_used + 'bytes ');
         embed.setDescription(resultObj.output);
         }
         embed.setColor([0, 225, 0]);
@@ -139,7 +147,7 @@ function languages(message)
     let embed = new Discord.RichEmbed();
     embed.setTitle(msgTitle);
     embed.setDescription(msgDes);
-    embed.setColor([023, 25, 55]);
+    embed.setColor([23, 25, 55]);
     if(embed)
         message.channel.send(embed);
     else
