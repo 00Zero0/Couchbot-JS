@@ -60,15 +60,16 @@ module.exports = {
      * @param {Message} msg
      */
     help: function(msg) {
-        let argv = msg.content.split(" ");
-        if (argv.length > 1) {
+        let argv = msg.content;
+        if (argv.length > 6) {
+            argv = argv.replace('!help', '');
+            argv = argv.split(',');
             let text = "";
-            argv.shift(); // Remove the command signature
             for (i in argv) {
                 let arg = argv[i];
                 for (j in Commands) {
                     let cmd = Commands[j];
-                    if (cmd.signature.replace('!', '') == arg.replace('!', '')) {
+                    if (cmd.signature.replace('!', '') == arg.replace('!', '').trim()) {
                         text += "\n" + cmd.signature + " : *" + cmd.description + "*";
                     }
                 }

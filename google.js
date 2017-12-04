@@ -5,7 +5,6 @@ const commands = require("./commands");
 const google = require('googleapis');
 var customsearch = google.customsearch('v1');
 
-
 var config = JSON.parse(fs.readFileSync('config/google.json', 'utf-8'));
 
 //Search configuration
@@ -15,6 +14,9 @@ const API_KEY = config.api_key;
 const START_SEARCH_INDEX = 1; //Use this if not specified by user, 1 because google API start index is 1
 const LENGTH_SEARCH = 10; //Show max 10 results (0-9) by default
 const MAX_IMAGE_NUMBER = 2;
+
+//Memes search in google
+const Memes = ['Best meme', 'Meme jokes', 'Top memes', 'Meme of the day', 'Memes'];
 
 async function searchweb(message)
 {
@@ -131,15 +133,15 @@ async function searchimage(message)
 
 async function gmeme(message)
 {
-  var indexUpto = 50;
+  var indexUpto = 10;
   content = message.content;
   //Get the search phrase written in between double qoutes
   var re = /"([^]+)"/;
-  var searchPhrase = content.match(re)?content.match(re)[1] + ' meme':'';
+  var searchPhrase = content.match(re)?content.match(re)[1] + ' memes':'';
   if(searchPhrase == '')
     indexUpto = 100;
   if(searchPhrase.length<1)
-    searchPhrase = (Math.floor((Math.random() * 10) + 1) % 2)?'Best meme':'Meme jokes';
+    searchPhrase = Memes[Math.floor((Math.random() * Memes.length) + 1) % 2];
   
   let sentMsg = await message.channel.send('Generating meme, please wait.......');
   var randomMeme = Math.floor((Math.random() * 50) + 1);
