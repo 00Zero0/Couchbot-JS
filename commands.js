@@ -6,20 +6,21 @@ const behaviour = require("./utils/behaviour");
 var Message = discord.Message;
 var Commands = [];
 
-// Constants
-var MAX_MSG_LEN = 2000;
+const MAX_MSG_LEN = 2000;
 
 /**
  * Compile list of commands into one message
  * @param {Boolean} useDesc
  * @return {String} Concatenated string of command info
 */
-function compileCommands(useDesc) {
-    let help_msg = "Commands:";
+function compileCommands(useDesc, hasRight) {
+    let help_msg = 'Commands:';
     if(useDesc) {
-        for(i in Commands) {
+        for(i in Commands) {        
             let cmd = Commands[i];
-            help_msg += "\n" + cmd.signature + " - " + cmd.description;
+            if(!hasRight && cmd.permissions<2) continue;
+            var title = "**" + cmd.signature + "**";
+            help_msg += '\n' + title + '\t' + cmd.description;
 
             // If message is too long, re-compile it without descriptions
             if(help_msg.length > MAX_MSG_LEN) {
@@ -30,13 +31,14 @@ function compileCommands(useDesc) {
     else {
         for(i in Commands) {
             let cmd = Commands[i];
+            if(!hasRight && cmd.permissions<2) continue;
             // If string becomes too long, add a '...' at the end and escape
             if((help_msg + "\n" + cmd.signature).length > (MAX_MSG_LEN - 4))
                 return help_msg + "\n...";
 
-            help_msg += "\n" + cmd.signature;
+            help_msg += "\t" + cmd.signature;
         }
-    }
+        }
     return help_msg;
 }
 
@@ -47,10 +49,10 @@ module.exports = {
     */
     load: function() {
         // Register behaviour commands
-        this.reg("!block", behaviour.output_block, 0, "blocks the output of the current channel");
-        this.reg("!unblock", behaviour.output_unblock, 0, "unblocks the output of the current channel");
-        this.reg("!blockxp", behaviour.xp_block, 0, "blocks the xp counting of the current channel");
-        this.reg("!unblockxp", behaviour.xp_unblock, 0, "unblocks the xp counting of the current channel");
+        this.reg("!block", behaviour.output_block, 0, "Blocks the output of the current channel");
+        this.reg("!unblock", behaviour.output_unblock, 0, "Unblocks the output of the current channel");
+        this.reg("!blockxp", behaviour.xp_block, 0, "Blocks the xp counting of the current channel");
+        this.reg("!unblockxp", behaviour.xp_unblock, 0, "Unblocks the xp counting of the current channel");
     },
 
     /**
@@ -67,18 +69,21 @@ module.exports = {
                 for (j in Commands) {
                     let cmd = Commands[j];
                     if (cmd.signature.replace('!', '') == arg.replace('!', '')) {
-                        text += "\n" + cmd.signature + " - " + cmd.description;
+                        text += "\n" + cmd.signature + " : *" + cmd.description + "*";
                     }
                 }
             }
-            msg.channel.send(text);
+            if(text=="")
+                msg.channel.send('Command not found!');
+            else
+                msg.channel.send(text);
         }
         else {
             // Check if no commands are registered
             if(Commands.length == 0)
                 return msg.channel.send("No commands registered.");
 
-            msg.channel.send(compileCommands(true));
+            msg.channel.send(compileCommands(true, rights.hasRights(msg.author)<2?true:false));
         }
     },
 

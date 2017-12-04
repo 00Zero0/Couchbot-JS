@@ -17,9 +17,23 @@ const lan_supp =
     'cpp', 'cpp11', 'c', 'conjure', 'csharp', 'java', 'javascript', 'haskel', 'perl', 'python', 'php', 'ruby'
 ];
 
-function runcode(message)
+async function runcode(message)
 {
     content = message.content;
+    //
+    //Check if code is present
+    //
+    var code = content.match(/```([^]+)```/);
+    if(!code)
+    {
+        message.channel.send('__Syntax error, please use:__ !runcode \\`\\`\\`*lan*\n*Your Code*\n\\`\\`\\` in\\`*Your input*\\`\n__You may omit the input (in)__');
+        return;
+    }
+    code = code[1];
+
+    //
+    //Check if the languge is pupported
+    //
     var regex = /```((cpp11)|(cpp)|(cs)|(conjure)|(c)|(java)|(js)|(haskel)|(perl)|(py)|(php)|(ruby))/;
     var lan = content.match(regex);
     if(!lan)
@@ -27,15 +41,8 @@ function runcode(message)
         message.channel.send('This language in not supported, type !languages to get list of all suported languages');
         return;
     }
-    
     lan = lan[1];
-    var code = content.match(/```([^]+)```/);
-    if(!code)
-    {
-        message.channel.send('Syntax error, please use correct syntax');
-        return;
-    }
-    code = code[1];
+
     code = code.replace(lan, '');
     
     var inputdata = content.match(/in`([^]+)`/);
@@ -44,7 +51,7 @@ function runcode(message)
     else
         inputdata = inputdata[1];
 
-    var sentMsgId = message.channel.send('Compiling please wait........');
+    let sentMsgId = await message.channel.send('Compiling please wait........');
     
     var lan_code = '';
     switch(lan)
@@ -92,6 +99,7 @@ function runcode(message)
 
             if(embed)
             {
+                sentMsgId.delete(0);
                 message.channel.send(embed);
             }
             else
@@ -105,11 +113,14 @@ function runcode(message)
         var resultObj = compileObj.run_status;
         if(resultObj.status != 'AC'){
             embed.setTitle('RUN TIME ERROR::');
-            embed.setDescription(resultObj.status);
+            embed.setDescription('Program sucessfully compiled but ran with errors!');
             embed.setColor([225, 0, 0]);
 
             if(embed)
+            {
+                sentMsgId.delete(0);
                 message.channel.send(embed);
+            }
             else
                 console.log('HACKER : Embed empty after compilation error!');
             return;
@@ -131,7 +142,10 @@ function runcode(message)
         embed.setColor([0, 225, 0]);
 
         if(embed)
+        {
+            sentMsgId.delete(0);
             message.channel.send(embed);
+        }
         else
             console.log('HACKER : Embed empty after compilation error!');
     });
@@ -159,7 +173,7 @@ module.exports = {
 
     load: function()
     {
-        commands.reg('!runcode', runcode, 2, 'Compiler and run your code');
+        commands.reg('!runcode', runcode, 2, 'Compile and run your code');
         commands.reg('!languages', languages, 2, 'Display all supported languages');
     }
 

@@ -7,6 +7,7 @@
 * Top and status commands for the level system
 * Setting up time for users
 * Google web and image search
+* Meme generation
 * Code compilation and running
 # Setup
 ### Dependencies:

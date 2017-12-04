@@ -16,7 +16,7 @@ const START_SEARCH_INDEX = 1; //Use this if not specified by user, 1 because goo
 const LENGTH_SEARCH = 10; //Show max 10 results (0-9) by default
 const MAX_IMAGE_NUMBER = 2;
 
-function searchweb(message)
+async function searchweb(message)
 {
     content = message.content;
     //Get the search phrase written in between double qoutes
@@ -24,9 +24,11 @@ function searchweb(message)
     var searchPhrase = content.match(re)?content.match(re)[1]:"";
     if(searchPhrase.length<1)
     {
-      message.channel.send('Syntax Incorrect!');
+      message.channel.send('__Syntax Incorrect! Please type :__!search web "*your search* "');
       return;
     }
+
+    let sentMsg = await message.channel.send('Searching web, please wait......');
 
     var startI = START_SEARCH_INDEX;
     startI = content.match(/-([0-9]?[0-9]?[0-9])/)?content.match(/-([0-9]?[0-9]?[0-9])/)[1]:START_SEARCH_INDEX; //Get the search starting index
@@ -47,16 +49,16 @@ function searchweb(message)
     /**Got Response
       *Creating embed
       */
-    
-    let messageTitle = '*Search Results from ' + startI + ' to ' + (startI + LENGTH_SEARCH - 1) + '*';
+    sentMsg.delete(0);
+    let messageTitle = '*Here\'s what I found (' + startI + ' to ' + (startI + LENGTH_SEARCH - 1) + ')*';
     let messageEmbed = "";
     let messageFooter = 'Total Results = ' + resp.searchInformation.formattedTotalResults;
     var length = LENGTH_SEARCH>resp.searchInformation.formattedTotalResults?resp.searchInformation.formattedTotalResults:LENGTH_SEARCH;
     if(length<0)
-    {
-      message.channel.send('No result');
-      return;
-    }
+      {
+        message.channel.send('No result');
+        return;
+      }
     for(var i = 0; i<length;i++)
       {
         messageEmbed +=  '**' + resp.items[i].title + '** :: ' + resp.items[i].link + '\n';
@@ -73,11 +75,11 @@ function searchweb(message)
     else
       console.log('Google Search : Embed could not be created.');
     });
-    
+ 
 }
 
 
-function searchimage(message)
+async function searchimage(message)
 {
   content = message.content;
   //Get the search phrase written in between double qoutes
@@ -85,9 +87,11 @@ function searchimage(message)
   var searchPhrase = content.match(re)?content.match(re)[1]:"";
   if(searchPhrase.length<1)
   {
-    message.channel.send('Syntax Incorrect!');
+    message.channel.send('__Syntax Incorrect! Please type :__ !search image "*your search* "');
     return;
   }
+
+  let sentMsg = await message.channel.send('Searching images, please wait.......');
 
   var startI = START_SEARCH_INDEX;
   startI = content.match(/-([0-9]?[0-9]?[0-9])/)?content.match(/-([0-9]?[0-9]?[0-9])/)[1]:START_SEARCH_INDEX; //Get the search starting index
@@ -108,22 +112,56 @@ function searchimage(message)
       /**Got Response
       *Creating message
       */
-      let messageDis = "";
-      let messageFooter = 'Showing '+ MAX_IMAGE_NUMBER+ ' of ' + resp.searchInformation.formattedTotalResults + ' images.';
+      sentMsg.delete(0);
       var length = MAX_IMAGE_NUMBER>resp.searchInformation.formattedTotalResults?resp.searchInformation.formattedTotalResults:MAX_IMAGE_NUMBER;
       if(length<1)
       {
         message.channel.send('No result');
         return;
       }
+      message.channel.send('Showing images of "*' + searchPhrase + '*"('+ length + ' of ' + resp.searchInformation.formattedTotalResults + ' images.)');
       for(var i = 0; i<length;i++)
       {
-        messageDis +=  resp.items[i].link + '\n';
+        var embed = new discord.RichEmbed();
+        embed.setImage(resp.items[i].link);
+        message.channel.send(embed);
       }
-      var s_message = messageDis + messageFooter;
-      message.channel.send(s_message);
-
       });
+}
+
+async function gmeme(message)
+{
+  var indexUpto = 50;
+  content = message.content;
+  //Get the search phrase written in between double qoutes
+  var re = /"([^]+)"/;
+  var searchPhrase = content.match(re)?content.match(re)[1] + ' meme':'';
+  if(searchPhrase == '')
+    indexUpto = 100;
+  if(searchPhrase.length<1)
+    searchPhrase = (Math.floor((Math.random() * 10) + 1) % 2)?'Best meme':'Meme jokes';
+  
+  let sentMsg = await message.channel.send('Generating meme, please wait.......');
+  var randomMeme = Math.floor((Math.random() * 50) + 1);
+
+  customsearch.cse.list({ cx: CX, q: searchPhrase, 
+    auth: API_KEY, c2coff: 1, searchType: 'image',
+    filter: 1, googlehost: "google.com", 
+    safe: "medium",
+    hl: "en", start: randomMeme, num: 1
+   }, function (err, resp) {
+      if (err) {
+        return console.log('An error occured in Google Search', err);
+      }
+
+      /**Got Response
+      *Creating message
+      */
+      sentMsg.delete(0);
+      var embed = new discord.RichEmbed();
+      embed.setImage(resp.items[0].link);
+      message.channel.send(embed);
+    });
 }
 
 
@@ -133,5 +171,6 @@ module.exports = {
     {
       commands.reg('!search web', searchweb, 2, 'Google what you want, its ovious');
       commands.reg('!search image', searchimage, 2, 'Google image search');
+      commands.reg('!gmeme', gmeme, 2, 'Generate a random meme');
     }
 }

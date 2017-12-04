@@ -24,7 +24,7 @@ var LEVEL_RANDOM_VALUE_MIN = 15;
 var LEVEL_RANDOM_VALUE_MAX = 40;
 var LEVEL_TIMER = 300 * 1000; // 5 minutes
 
-var SAVE_INTERVAL = 1 * 60 * 1000; // an hour
+var SAVE_INTERVAL = 60 * 60 * 1000; // an hour
 
 var LEVEL_RANK_UP = 10;
 
@@ -308,7 +308,7 @@ function top(msg) {
     let data = msg.content.split(" ");
 
     if(data.length < 2) {
-        msg.channel.send("Syntax incorrect!");
+        msg.channel.send("__Syntax incorrect! Please type :__ !top *number*");
         return;
     }
     if(data.length >= 3) {
@@ -316,7 +316,7 @@ function top(msg) {
         let amount2 = Math.max(Math.min(parseInt(data[2]), 30), 1);
 
         if(isNaN(amount1) || isNaN(amount2)) {
-            msg.channel.send("Syntax incorrect");
+            msg.channel.send("__Syntax incorrect! Please type :__ !top *number*");
             return;
         }
 
@@ -346,7 +346,7 @@ function top(msg) {
     }
     let amount = Math.max(Math.min(parseInt(data[1]), 30), 1);
     if(isNaN(amount)){
-        msg.channel.send("Syntax incorrect");
+        msg.channel.send("__Syntax incorrect! Please type :__ !top *number*");
         return;
     }
 
@@ -573,13 +573,13 @@ module.exports = {
 
     load: function(id, bot_guild) {
         // Register commands
-        commands.reg("!status", status, 2, "displays the status of the user");
-        commands.reg("!top", top, 2, "displays the top users");
-        commands.reg("!givexp", givexp, 0, "gives the specified amount of xp to the user");
-        commands.reg("!takexp", takexp, 0, "takes the specified amount of xp from the user");
-        commands.reg("!setnotification", setNotificationChannel, 0, "blocks the output of the current channel");
-        commands.reg("!clearnotification", clearNotificationChannel, 0, "clears the channel in which notifications take place");
-        commands.reg("!restore", restore, 0, "restores a user which has lost his level");
+        commands.reg("!status", status, 2, "Displays the status of the user");
+        commands.reg("!top", top, 2, "Displays the top users");
+        commands.reg("!givexp", givexp, 0, "Gives the specified amount of xp to the user");
+        commands.reg("!takexp", takexp, 0, "Takes the specified amount of xp from the user");
+        commands.reg("!setnotification", setNotificationChannel, 0, "Blocks the output of the current channel");
+        commands.reg("!clearnotification", clearNotificationChannel, 0, "Clears the channel in which notifications take place");
+        commands.reg("!restore", restore, 0, "Restores a user which has lost his level");
 
         if(fs.existsSync(FILE_PATH)) {
             level_data = JSON.parse(fs.readFileSync(FILE_PATH));

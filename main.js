@@ -8,6 +8,7 @@ const timezone = require("./timezone");
 const level = require("./level");
 const google = require("./google");
 const hacker = require("./hacker");
+const meme = require("./meme");
 
 const bot = new Discord.Client();
 
@@ -57,6 +58,7 @@ bot.on("ready", () => {
     timezone.load();
     google.load();
     hacker.load();
+    meme.load();
     commands.load();
 
     // Misc
@@ -68,10 +70,7 @@ bot.on("ready", () => {
 //Greet new members
 //
 bot.on('guildAddMember', member => {
-    const channel = member.guild.channels.find('name', 'member-log');
-    if (!channel) return;
-
-    channel.send(`Welcome to the server, ${member}`);
+    member.send(`Welcome to the server, ${member}`)
 });
 
 
@@ -81,11 +80,7 @@ bot.on('guildAddMember', member => {
 bot.on('message', msg => {
     // Don't process if the message is from a bot
     if (msg.author.bot)
-    {
-        if(msg.content.startsWith('Compiling'))
-            msg.delete(1.2 * 1000);
         return;
-    }
 
     commands.process(msg);
 

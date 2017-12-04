@@ -8,7 +8,7 @@ var FILE = "data/timezone.json"
 
 var userData = [];
 
-var SAVE_INTERVAL = 1 * 60 * 1000;
+var SAVE_INTERVAL = 60 * 60 * 1000;
 
 function saveTimezone() {
     let array = [];
@@ -25,7 +25,7 @@ function set(msg) {
     //Check if given time is valid
     var timezone = msg.content.match(/\s(-?)(((0?)([0-9]))|(10|11)):[0-5][0-9]/g);
     if(timezone == null){
-        msg.channel.send("Timezone is not valid.");
+        msg.channel.send("__Timezone is not valid. Please type__ !timezone set *hh:mm*");
         return;
     }
     var userID = msg.author.id;
@@ -49,7 +49,7 @@ function get(msg) {
         return;
     }
     if(words.length < 3) {
-        msg.channel.send("Please specify user");
+        msg.channel.send("__Please specify user. Type:__ !timezone get *mention_user/user_name*");
         return;
     }
     var username = words[2];
@@ -99,7 +99,7 @@ function localtime(msg) {
         return;
     }
     if(words.length < 2) {
-        msg.channel.send("Please specify user");
+        msg.channel.send("__Please specify user. Type:__ !timezone get *mention_user/user_name*");
         return;
     }
     var username = words[1];
@@ -143,9 +143,9 @@ module.exports = {
 
     load: function() {
         // Register commands
-        commands.reg("!timezone set", set, 2, "sets your timezone location (UTC)");
-        commands.reg("!timezone get", get, 2, "gets the timezone of the user, if user has specified it");
-        commands.reg("!localtime", localtime, 2, "gets the current time of day for the specified user");
+        commands.reg("!timezone set", set, 2, "Sets your timezone location (UTC)");
+        commands.reg("!timezone get", get, 2, "Gets the timezone of the user, if user has specified it");
+        commands.reg("!localtime", localtime, 2, "Gets the current time of day for the specified user");
 
         if(fs.existsSync(FILE)) {
             let array = JSON.parse(fs.readFileSync(FILE));
