@@ -82,7 +82,7 @@ module.exports = {
         else {
             // Check if no commands are registered
             if(Commands.length == 0)
-                return msg.channel.send("No commands registered.");
+                return msg.channel.send("No commands registered. Please type: `!help cmd1, cmd2, ...` cmdn's are optional");
 
             msg.channel.send(compileCommands(true, rights.hasRights(msg.author)<2?true:false));
         }

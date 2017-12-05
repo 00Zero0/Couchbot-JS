@@ -125,13 +125,25 @@ function save() {
  */
 
 function print_status(author, channel, values) {
+    let embed = new discord.RichEmbed();
     let name = author.user.username;
     if (typeof author.nickname != 'undefined' && author.nickname != null)
         name = author.nickname;
-
-    let embed = new discord.RichEmbed();
-    let message = "Level: " + values[0] + "\nExp: " + values[2] + "/" + LEVEL_EXPERIENCE_NEEDED.toString() +"\nRank: " + values[3]+ "\nLocal Time: " + values[4];
     embed.setAuthor(name, author.user.displayAvatarURL);
+
+    //If the user is bot
+    if(author.user.bot)
+    {
+        let date = new Date();
+        let message = "Level: ∞\nExp: ∞\nRank: 0\nLocal Time: " + date.getHours() + ":" + (date.getMinutes()<10?date.getMinutes()+'0':date.getMinutes());
+        embed.setDescription(message);
+        embed.setTitle('The BOT');
+        embed.setColor(randomColor());
+        channel.send(embed);
+        return;
+    }
+
+    let message = "Level: " + values[0] + "\nExp: " + values[2] + "/" + LEVEL_EXPERIENCE_NEEDED.toString() +"\nRank: " + values[3]+ "\nLocal Time: " + values[4];
     embed.setDescription(message);
     embed.setTitle(values[1]);
     embed.setColor(randomColor());
@@ -308,7 +320,7 @@ function top(msg) {
     let data = msg.content.split(" ");
 
     if(data.length < 2) {
-        msg.channel.send("__Syntax incorrect! Please type :__ !top *number*");
+        msg.channel.send("Syntax incorrect! Please type : `!top *number*`");
         return;
     }
     if(data.length >= 3) {
@@ -316,7 +328,7 @@ function top(msg) {
         let amount2 = Math.max(Math.min(parseInt(data[2]), 30), 1);
 
         if(isNaN(amount1) || isNaN(amount2)) {
-            msg.channel.send("__Syntax incorrect! Please type :__ !top *number*");
+            msg.channel.send("Syntax incorrect! Please type : `!top *number*`");
             return;
         }
 
@@ -346,7 +358,7 @@ function top(msg) {
     }
     let amount = Math.max(Math.min(parseInt(data[1]), 30), 1);
     if(isNaN(amount)){
-        msg.channel.send("__Syntax incorrect! Please type :__ !top *number*");
+        msg.channel.send("Syntax incorrect! Please type : `!top *number*`");
         return;
     }
 

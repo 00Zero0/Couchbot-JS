@@ -26,7 +26,7 @@ async function searchweb(message)
     var searchPhrase = content.match(re)?content.match(re)[1]:"";
     if(searchPhrase.length<1)
     {
-      message.channel.send('__Syntax Incorrect! Please type :__!search web "*your search* "');
+      message.channel.send('Syntax Incorrect! Please type : `!search web "*your search* "`');
       return;
     }
 
@@ -89,7 +89,7 @@ async function searchimage(message)
   var searchPhrase = content.match(re)?content.match(re)[1]:"";
   if(searchPhrase.length<1)
   {
-    message.channel.send('__Syntax Incorrect! Please type :__ !search image "*your search* "');
+    message.channel.send('Syntax Incorrect! Please type : `!search image "*your search* "`');
     return;
   }
 
@@ -144,7 +144,7 @@ async function gmeme(message)
     searchPhrase = Memes[Math.floor((Math.random() * Memes.length) + 1) % 2];
   
   let sentMsg = await message.channel.send('Generating meme, please wait.......');
-  var randomMeme = Math.floor((Math.random() * 50) + 1);
+  var randomMeme = Math.floor((Math.random() * indexUpto) + 1);
 
   customsearch.cse.list({ cx: CX, q: searchPhrase, 
     auth: API_KEY, c2coff: 1, searchType: 'image',

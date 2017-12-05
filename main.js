@@ -64,7 +64,7 @@ bot.on("ready", () => {
     // Misc
     commands.reg("!help", commands.help, 2, "Lists all the available commands");
     onReady = true;
-})
+});
 
 //
 //Greet new members

@@ -15,6 +15,7 @@
 * [Discord js](https://github.com/hydrabolt/discord.js)
 * [googleapis](https://github.com/google/google-api-nodejs-client/)
 * [Hacker Earth node js](https://github.com/tarungarg546/HackerEarth-node)
+* [Jimp] (https://github.com/oliver-moran/jimp)
 ### Files needed:
 First of all, you need to create a folder called **config**, and add to it the following files:
 A file called "config.json" which contains the following:
