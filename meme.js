@@ -129,6 +129,7 @@ function addMeme(mName, mTop_left, mBottom_right, mSec_tl, mSec_br)
         sec_br : mSec_br
     });
     console.log("\tMeme added :'%s'", mName);
+    
     return true;
 }
 
