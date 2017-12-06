@@ -137,6 +137,11 @@ async function gmeme(message)
   content = message.content;
   //Get the search phrase written in between double qoutes
   var re = /"([^]+)"/;
+  if(!content.match(re) && content.length>8)
+  {
+    message.channel.send('Error syntax, please type: `!gmeme "meme-name"` , you may ignore the "meme-name" to generate a random meme');
+    return;
+  }
   var searchPhrase = content.match(re)?content.match(re)[1] + ' memes':'';
   if(searchPhrase == '')
     indexUpto = 100;
