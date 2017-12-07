@@ -154,7 +154,7 @@ async function gmeme(message)
   customsearch.cse.list({ cx: CX, q: searchPhrase, 
     auth: API_KEY, c2coff: 1, searchType: 'image',
     filter: 1, googlehost: "google.com", 
-    safe: "medium",
+    safe: "high",
     hl: "en", start: randomMeme, num: 1
    }, function (err, resp) {
       if (err) {

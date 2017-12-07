@@ -148,6 +148,26 @@ module.exports = {
         addMeme('banhammer', [200, 10], [384, 146] );
         addMeme('kick', [208, 51],  [237, 79], [66, 10], [98, 51] ); 
         addMeme('slap', [237, 105],  [339, 243], [78, 51], [181, 148] );
+        addMeme('no-comment-code', [526, 348], [828, 660]);
+        addMeme('starter-programmer', [138, 162], [168, 202]);
+        addMeme('first-code-works', [183, 129], [329, 309]);
+        addMeme('glutton', [333, 147], [409, 232]);
+        addMeme('no-questions', [422, 21], [578, 298], [171, 9], [237, 104]);
+        addMeme('watchin-anime-sub', [131, 154], [252, 273]);
+        addMeme('prison', [374, 9], [502, 227]);
+        addMeme('drunk-birthday', [181, 165], [343, 318]);
+        addMeme('titan', [311, 18], [340, 70]);
+        addMeme('important', [145, 90], [256, 235]);
+        addMeme('smart', [121, 175], [216, 295]);
+        addMeme('dance', [195, 76], [276, 161]);
+        addMeme('eaten-alive', [36, 59], [105, 115]);
+        addMeme('rhino-chase', [302, 12], [345, 68], [126, 103], [186, 166]);
+        addMeme('chase', [258, 74], [293, 111]);
+        addMeme('programming-sprank', [384, 162], [456, 225]);
+        addMeme('first-code-works-noob', [135, 91], [166, 152], [138, 292], [175, 343]);
+        addMeme('programmer-lan', [598, 148], [704, 304], [256, 256], [357, 368]);
+        addMeme('password-problem', [113, 94], [251, 292]);
+        addMeme('shadow-programmer', [379, 110], [472, 278]);
     }
 
 }
