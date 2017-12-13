@@ -9,6 +9,7 @@ const level = require("./level");
 const google = require("./google");
 const hacker = require("./hacker");
 const meme = require("./meme");
+const reminder = require("./reminder");
 
 const bot = new Discord.Client();
 
@@ -36,6 +37,7 @@ process.on("SIGINT", function() {
     level.save();
     timezone.save();
     behaviour.save();
+    reminder.save();
     bot.destroy();
     process.exit();
 });
@@ -60,6 +62,7 @@ bot.on("ready", () => {
     hacker.load();
     meme.load();
     commands.load();
+    reminder.load(bot);
 
     // Misc
     commands.reg("!help", commands.help, 2, "Lists all the available commands");
