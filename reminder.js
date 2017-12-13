@@ -1,5 +1,6 @@
 const discord = require('discord.js');
 const cmd = require('./commands');
+const rights = require("./utils/rights");
 const localtime = require('./timezone');
 const fs = require('fs');
 
@@ -8,6 +9,7 @@ const SAVE_INTERVAL = 1 * 60 * 1000;
 const CHECK_INTERVAL = 30 * 1000; //Check every 30 secs for reminding
 const MAX_TITLE_LEN = 15;
 const MAX_DESC_LEN = 100;
+const notificationChannel = JSON.parse(fs.readFileSync('./data/notification.json'));
 
 var data = [];
 
@@ -40,7 +42,7 @@ function del(id, title)
     return false;
 }
 
-function showAll(id, message)
+function showAll(id, message, isChannel)
 {
     let msg = '';
 
@@ -49,8 +51,16 @@ function showAll(id, message)
             msg += '\n ' + any.title + ' for ' + any.date + ' ' + any.time;
     });
 
-    (msg=='')?(msg='You have no reminders set'):(msg+='\nThese are all your reminders');
-    message.reply(msg);
+    if(isChannel)
+    {
+        (msg=='')?(msg='There are no reminders set'):(msg+='\nThese are all the channel reminders');
+        message.channel.send(msg);
+    }
+    else
+    {
+        (msg=='')?(msg='You have no reminders set'):(msg+='\nThese are all your reminders');
+        message.reply(msg);
+    }
 }
 
 function parseCmd(message)
@@ -135,7 +145,71 @@ function parseCmd(message)
         });
 
         add(userId, title, reminder, date, time);
-        message.reply('Your reminder for ' + date + ', ' + time + ' with title : "' + title + '" has been set')
+        message.reply('Your reminder for ' + date + ', ' + time + ' with title : "' + title + '" has been set');
+        } break;
+
+        case 'channel':
+        {
+        //Check for date
+        var date = message.content.match(/\s(((10|11|12)|([1-9]))-([0-3][0-9]))/g);
+        let dateData = new Date();
+        if(date == null)
+        {
+            date = (dateData.getMonth()+1) + '-' + dateData.getDate();
+        }
+        else
+        {
+            date = date[0];
+            date = date.trim();
+        }
+
+        //If the date is from past
+        var mths_int = parseInt(date.slice(0, 2));
+        if(mths_int < (dateData.getMonth() + 1))
+        {
+            message.reply('You live in the past? :joy: ');
+            return;
+        }
+        
+        //Check for time
+        var time = message.content.match(/\s((((0?)([0-9]))|(1[0-9])|(2[0-3])):[0-5][0-9])/g);
+        if(time == null) { errMsg(message.channel); return; }
+        time = time[0];
+        time = time.trim();
+
+        //Get title and message
+        var title = message.content.match(/\s\[[^]+,/g);
+        if(title == null) { errMsg(message.channel); return; }
+        title = title[0];
+        title = title.replace(' [', '');
+        title = title.replace(',', '');
+        //If the title is longer than MAX_TITLE_LEN letters, return
+        if(title.length > MAX_TITLE_LEN) {
+            message.channel.send('Title too long, type ' + MAX_TITLE_LEN + ' letters or less');
+            return;
+        }
+        var reminder = message.content.match(/,[^]+\]/g);
+        if(reminder == null) { errMsg(message.channel); return; } 
+        reminder = reminder[0];
+        reminder = reminder.replace(',', '');
+        reminder = reminder.replace(']', '');
+        reminder = reminder.trim();
+        //If the description is longer than MAX_DESC_LEN letter, return
+        if(reminder.length > MAX_DESC_LEN){
+            message.channel.send('Discription too long, type ' + MAX_DESC_LEN + ' letters or less');
+            return;
+        }
+
+        //If the reminder have save title by same user, return
+        data.forEach(function (any){
+            if(any.id == notificationChannel && any.title == title){
+                channel.reply('The reminder with same title has already been set, please use different title');
+                return;
+            }
+        });
+
+        add(notificationChannel, title, reminder, date, time);
+        message.channel.send('Your reminder for ' + date + ', ' + time + ' with title : "' + title + '" has been set');
         } break;
 
         case 'del':
@@ -153,13 +227,25 @@ function parseCmd(message)
 
             if(del(userId, title))
                 message.reply('Your reminder with title : "' + title + '" has been deleted');
+            else if(rights.hasRights(message.author)<2)
+            {
+                if(del(notificationChannel, title))
+                    message.channel.send('The reminder with title : "' + title + '" has been deleted');
+                else
+                    message.reply('Your reminder with title : "' + title + '" has not been added yet :joy: ');    
+            }
             else
                 message.reply('Your reminder with title : "' + title + '" has not been added yet :joy: ');
         } break;
 
         case 'all':
         {
-            showAll(message.author.id, message);
+            showAll(message.author.id, message, false);
+        } break;
+
+        case 'all-channel':
+        {
+            showAll(notificationChannel, message, true);
         } break;
 
         default: errMsg(message.channel); return;
@@ -169,17 +255,50 @@ function parseCmd(message)
 function chkReminder(bot)
 {
     let dateData = new Date();
-    //Today's date
-    let today_date = (dateData.getMonth()+1) + '-' + dateData.getDate();
-    //Today's time
-    let minutes  = dateData.getMinutes();
-    let hours = dateData.getHours();
-    let today_time = hours + ":" + (minutes<10? '0': '') + minutes;
-
+    var today_date, today_time;
+    var userTime, hours, minutes;
+    let isChannel = false;
+    
     data.forEach(function(any){
+        //Get the user and their data
+        var user = bot.users.find('id', any.id);
+        if(user==null || user==undefined)
+        {
+            user = bot.channels.find('id', any.id);
+            //Today's date
+            today_date = (dateData.getMonth()+1) + '-' + dateData.getDate();
+            //Today's time
+            minutes  = dateData.getMinutes();
+            hours = dateData.getHours();
+            today_time = hours + ":" + (minutes<10? '0': '') + minutes;
+            isChannel = true;
+        }
+        else{
+            userTime = localtime.getData(user.id);
+            //Today's date
+            today_date = (dateData.getMonth()+1) + '-' + dateData.getDate();
+            //Today's time for the user
+            userTime = (userTime.toString()).split(':');
+            date = new Date;
+            hours = parseInt(userTime[0], 10);
+            minutes = date.getUTCMinutes() + parseInt(userTime[1], 10);
+            while(minutes >= 60) {
+                hours += 1;
+                minutes -= 60;
+            }
+            hours = date.getUTCHours() + hours;
+            while(hours >= 24) {
+                hours -= 24;
+            }
+            today_time = hours + ":" + (minutes<10? '0': '') + minutes;
+            isChannel = false;
+        }
+    
+       //Check if the time is up
        if(any.date == today_date && any.time == today_time){
-           let user = bot.users.find('id', any.id);
-           user.send('```REMINDER::\n'+
+           let mentionE = '';
+           if(isChannel) mentionE = '@everyone';
+           user.send(mentionE + '```REMINDER::\n'+
                     'Title : ' + any.title + '\n' + 
                     'Description : ' + any.msg + ' ```');
             del(any.id, any.title);
@@ -191,10 +310,11 @@ function chkReminder(bot)
 function errMsg(channel)
 {
     channel.send('Syntax Error.' + 
-    'To add reminder please type \n ```!reminder add mm-dd hh:mm [title, description]```' + 
-    ', you can omit the `[m]m-dd` to set reminder for this day' +
+    'To add reminder for you please type \n ```!reminder add [m]m-dd hh:mm [title, description]```' +
+    'To add reminder for channel please type \n ```!reminder channel [m]m-dd hh:mm [title, description]```' + 
+    'you can omit the `[m]m-dd` to set reminder for this day' +
     '\n To remove reminder please type \n ```!reminder del [title]``` ' + 
-    '\n To see all your reminders, type \n ```!reminder all``` ');
+    '\n To see all your reminders, type \n ```!reminder all\nOR\n!reminder all-channel``` ');
 }
 
 module.exports = {
