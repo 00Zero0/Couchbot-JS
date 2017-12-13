@@ -4,7 +4,7 @@ const commands = require("./commands")
 
 var Message = discord.Message;
 
-var FILE = "data/timezone.json"
+var FILE = "data/timezone.json";
 
 var userData = [];
 
