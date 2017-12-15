@@ -12,10 +12,12 @@
 # Setup
 ### Dependencies:
 * Node.js
+### Node Packages:
 * [Discord js](https://github.com/hydrabolt/discord.js)
 * [googleapis](https://github.com/google/google-api-nodejs-client/)
 * [Hacker Earth node js](https://github.com/tarungarg546/HackerEarth-node)
 * [Jimp](https://github.com/oliver-moran/jimp)
+* You can install all these packages by running the **install.bat** file in Windows
 ### Files needed:
 First of all, you need to create a folder called **config**, and add to it the following files:
 A file called "config.json" which contains the following:
@@ -57,3 +59,4 @@ __Note__: Currently the ***admin*** is not *in use* meaning you should set yours
 Now, believe it or not, the setup is complete!
 ### Starting the bot
 To start the bot, open a command terminal in the **directory of the main.js file** and simply write ```node main.js```.
+Alternatively you can run the **run.bat** in Windows
