@@ -3,7 +3,7 @@ const fs = require("fs")
 
 var Message = discord.Message;
 
-var BEHAVIOUR_LOCATION = "config/behaviour.json"
+var BEHAVIOUR_LOCATION = "data/behaviour.json"
 
 var bOutChannels = [];
 var xpOutChannels = [];
