@@ -8,7 +8,7 @@ var FILE = "data/timezone.json";
 
 var userData = [];
 
-var SAVE_INTERVAL = 60 * 60 * 1000;
+var SAVE_INTERVAL = 30 * 60 * 1000;
 
 function saveTimezone() {
     let array = [];

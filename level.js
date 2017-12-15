@@ -24,7 +24,7 @@ var LEVEL_RANDOM_VALUE_MIN = 15;
 var LEVEL_RANDOM_VALUE_MAX = 40;
 var LEVEL_TIMER = 300 * 1000; // 5 minutes
 
-var SAVE_INTERVAL = 60 * 60 * 1000; // an hour
+var SAVE_INTERVAL = 30 * 60 * 1000; // half an hour
 
 var LEVEL_RANK_UP = 10;
 

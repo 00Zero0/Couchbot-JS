@@ -5,7 +5,7 @@ const localtime = require('./timezone');
 const fs = require('fs');
 
 const FILE = './data/reminder.json';
-const SAVE_INTERVAL = 1 * 60 * 1000;
+const SAVE_INTERVAL = 30 * 60 * 1000;
 const CHECK_INTERVAL = 30 * 1000; //Check every 30 secs for reminding
 const MAX_TITLE_LEN = 15;
 const MAX_DESC_LEN = 100;
