@@ -9,7 +9,6 @@ const SAVE_INTERVAL = 1 * 60 * 1000;
 const CHECK_INTERVAL = 30 * 1000; //Check every 30 secs for reminding
 const MAX_TITLE_LEN = 15;
 const MAX_DESC_LEN = 100;
-const notificationChannel = JSON.parse(fs.readFileSync('./data/notification.json'));
 
 var data = [];
 
@@ -200,15 +199,15 @@ function parseCmd(message)
             return;
         }
 
-        //If the reminder have save title by same user, return
+        //If the reminder have save title by in same channel, return
         data.forEach(function (any){
-            if(any.id == notificationChannel && any.title == title){
+            if(any.id == message.channel && any.title == title){
                 channel.reply('The reminder with same title has already been set, please use different title');
                 return;
             }
         });
 
-        add(notificationChannel, title, reminder, date, time);
+        add(message.channel, title, reminder, date, time);
         message.channel.send('Your reminder for ' + date + ', ' + time + ' with title : "' + title + '" has been set');
         } break;
 
@@ -229,7 +228,7 @@ function parseCmd(message)
                 message.reply('Your reminder with title : "' + title + '" has been deleted');
             else if(rights.hasRights(message.author)<2)
             {
-                if(del(notificationChannel, title))
+                if(del(message.channel, title))
                     message.channel.send('The reminder with title : "' + title + '" has been deleted');
                 else
                     message.reply('Your reminder with title : "' + title + '" has not been added yet :joy: ');    
@@ -245,7 +244,7 @@ function parseCmd(message)
 
         case 'all-channel':
         {
-            showAll(notificationChannel, message, true);
+            showAll(message.channel, message, true);
         } break;
 
         default: errMsg(message.channel); return;
