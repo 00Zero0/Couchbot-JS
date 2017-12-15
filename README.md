@@ -47,7 +47,6 @@ Next, you'll need to set the configuration for Hacker Earth API. Create a file n
 
 ```json
 {
-	"id" : "HACKER_EARTH_ID",
 	"secret_key" : "HACKER_EARTH_SECRET_KEY"
 }
 ```
