@@ -15,9 +15,9 @@ var data = [];
 //Function to return localtime of user in string format
 function getlocaltime(id)
 {
-    let userTime = localtime.getData(id);
+    var userTime = localtime.getData(id);
     //Today's time for the user
-    let userTime = userTime.toString().split(":");
+    userTime = userTime.toString().split(":");
     let date = new Date();
     let hours = parseInt(userTime[0], 10);
     let minutes = date.getUTCMinutes() + parseInt(userTime[1], 10);
