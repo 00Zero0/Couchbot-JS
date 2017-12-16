@@ -12,6 +12,27 @@ const MAX_DESC_LEN = 100;
 
 var data = [];
 
+//Function to return localtime of user in string format
+function getlocaltime(id)
+{
+    let userTime = localtime.getData(id);
+    //Today's time for the user
+    let userTime = userTime.toString().split(":");
+    let date = new Date();
+    let hours = parseInt(userTime[0], 10);
+    let minutes = date.getUTCMinutes() + parseInt(userTime[1], 10);
+    while (minutes >= 60) {
+      hours += 1;
+      minutes -= 60;
+    }
+    hours = date.getUTCHours() + hours;
+    while (hours >= 24) {
+      hours -= 24;
+    }
+    today_time = hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+    return today_time;
+}
+
 function saveReminder()
 {
     fs.writeFileSync(FILE, JSON.stringify(data));
@@ -26,8 +47,6 @@ function add(id, title, reminder, date, time)
         "date" : date,
         "time" : time
     });
-    //TODO REMOVE
-    console.log(JSON.stringify(data));
 }
 
 function del(id, title)
@@ -114,14 +133,13 @@ function parseCmd(message)
           time = time.trim();
 
           //If the time is from past
-          let array_time = time.split(':');
-          //TODO USER TIME
-          if(array_time[0] < dateData.getHours()){
-              message.reply("You are late for the reminder itself :joy: ");
+          let array_time = time.split(':'); //given time
+          let user_time = getlocaltime(userId).split(':');  //user local time
+          if (array_time[0] < user_time[0]) {
+            message.reply("You are late for the reminder itself :joy: ");
           }
-          //TODO USER TIME
-          if(array_time[1] < dateData.getMinutes()){
-              message.reply("You are late for the reminder itself :joy: ");
+          if (array_time[1] < user_time[1]) {
+            message.reply("You are late for the reminder itself :joy: ");
           }
 
           //Get title and message
@@ -167,66 +185,81 @@ function parseCmd(message)
 
         case 'channel':
         {
-        //Check for date
-        var date = message.content.match(/\s(((10|11|12)|([1-9]))-([0-3][0-9]))/g);
-        let dateData = new Date();
-        if(date == null)
-        {
-            date = (dateData.getMonth()+1) + '-' + dateData.getDate();
-        }
-        else
-        {
+          //Check for date
+          var date = message.content.match(/\s(((10|11|12)|([1-9]))-([0-3][0-9]))/g);
+          let dateData = new Date();
+          if (date == null) {
+            date = dateData.getMonth() + 1 + "-" + dateData.getDate();
+          } else {
             date = date[0];
             date = date.trim();
-        }
+          }
 
-        //If the date is from past
-        var mths_int = parseInt(date.slice(0, 2));
-        if(mths_int < (dateData.getMonth() + 1))
-        {
-            message.reply('You live in the past? :joy: ');
+          //If the date is from past
+          var mths_int = parseInt(date.slice(0, 2));
+          if (mths_int < dateData.getMonth() + 1) {
+            message.reply("You live in the past? :joy: ");
             return;
-        }
-        
-        //Check for time
-        var time = message.content.match(/\s((((0?)([0-9]))|(1[0-9])|(2[0-3])):[0-5][0-9])/g);
-        if(time == null) { errMsg(message.channel); return; }
-        time = time[0];
-        time = time.trim();
+          }
 
-        //Get title and message
-        var title = message.content.match(/\s\[[^]+,/g);
-        if(title == null) { errMsg(message.channel); return; }
-        title = title[0];
-        title = title.replace(' [', '');
-        title = title.replace(',', '');
-        //If the title is longer than MAX_TITLE_LEN letters, return
-        if(title.length > MAX_TITLE_LEN) {
-            message.channel.send('Title too long, type ' + MAX_TITLE_LEN + ' letters or less');
+          //Check for time
+          var time = message.content.match(/\s((((0?)([0-9]))|(1[0-9])|(2[0-3])):[0-5][0-9])/g);
+          if (time == null) {
+            errMsg(message.channel);
             return;
-        }
-        var reminder = message.content.match(/,[^]+\]/g);
-        if(reminder == null) { errMsg(message.channel); return; } 
-        reminder = reminder[0];
-        reminder = reminder.replace(',', '');
-        reminder = reminder.replace(']', '');
-        reminder = reminder.trim();
-        //If the description is longer than MAX_DESC_LEN letter, return
-        if(reminder.length > MAX_DESC_LEN){
-            message.channel.send('Discription too long, type ' + MAX_DESC_LEN + ' letters or less');
-            return;
-        }
+          }
+          time = time[0];
+          time = time.trim();
 
-        //If the reminder have save title by in same channel, return
-        data.forEach(function (any){
-            if(any.id == message.channel && any.title == title){
-                channel.reply('The reminder with same title has already been set, please use different title');
-                return;
+          //If the time is from past
+          let array_time = time.split(":"); //given time
+          let server_time = [dateData.getHours(), dateData.getMinutes()]; //server local time
+          if (array_time[0] < server_time[0]) {
+            message.reply("You are late for the reminder itself :joy: ");
+          }
+          if (array_time[1] < server_time[1]) {
+            message.reply("You are late for the reminder itself :joy: ");
+          }
+
+          //Get title and message
+          var title = message.content.match(/\s\[[^]+,/g);
+          if (title == null) {
+            errMsg(message.channel);
+            return;
+          }
+          title = title[0];
+          title = title.replace(" [", "");
+          title = title.replace(",", "");
+          //If the title is longer than MAX_TITLE_LEN letters, return
+          if (title.length > MAX_TITLE_LEN) {
+            message.channel.send("Title too long, type " + MAX_TITLE_LEN + " letters or less");
+            return;
+          }
+          var reminder = message.content.match(/,[^]+\]/g);
+          if (reminder == null) {
+            errMsg(message.channel);
+            return;
+          }
+          reminder = reminder[0];
+          reminder = reminder.replace(",", "");
+          reminder = reminder.replace("]", "");
+          reminder = reminder.trim();
+          //If the description is longer than MAX_DESC_LEN letter, return
+          if (reminder.length > MAX_DESC_LEN) {
+            message.channel.send("Discription too long, type " + MAX_DESC_LEN + " letters or less");
+            return;
+          }
+
+          //If the reminder have save title by in same channel, return
+          data.forEach(function(any) {
+            if (any.id == message.channel && any.title == title) {
+              channel.reply("The reminder with same title has already been set, please use different title");
+              return;
             }
-        });
+          });
 
-        add(message.channel.id, title, reminder, date, time);
-        message.channel.send('Your reminder for ' + date + ', ' + time + ' with title : "' + title + '" has been set');
+          add(message.channel.id, title, reminder, date, time);
+          message.channel.send("Your reminder for " + date + ", " + time + ' with title : "' + title + '" has been set');
         } break;
 
         case 'del':
@@ -296,19 +329,7 @@ function chkReminder(bot)
             //Today's date
             today_date = (dateData.getMonth()+1) + '-' + dateData.getDate();
             //Today's time for the user
-            userTime = (userTime.toString()).split(':');
-            date = new Date;
-            hours = parseInt(userTime[0], 10);
-            minutes = date.getUTCMinutes() + parseInt(userTime[1], 10);
-            while(minutes >= 60) {
-                hours += 1;
-                minutes -= 60;
-            }
-            hours = date.getUTCHours() + hours;
-            while(hours >= 24) {
-                hours -= 24;
-            }
-            today_time = hours + ":" + (minutes<10? '0': '') + minutes;
+            today_time = getlocaltime(user.id);
             isChannel = false;
         }
     
