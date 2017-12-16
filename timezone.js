@@ -75,7 +75,9 @@ function get(msg) {
 
 function servertime(msg) {
     let date = new Date();
-    msg.channel.send("The local time in the server is " + date.getHours() + ":" + (date.getMinutes() < 10 ? "0": "") + minutes);
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    msg.channel.send("The local time in the server is " + hours + ":" + (minutes < 10 ? "0": "") + minutes);
 }
 
 module.exports = {
