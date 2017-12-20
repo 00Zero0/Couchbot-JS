@@ -7,7 +7,7 @@ const commands = require("./commands");
 const timezone = require("./timezone");
 const level = require("./level");
 const google = require("./google");
-const hacker = require("./hacker");
+//const hacker = require("./hacker");
 const meme = require("./meme");
 const reminder = require("./reminder");
 
@@ -59,7 +59,7 @@ bot.on("ready", () => {
     behaviour.load();
     timezone.load();
     google.load();
-    hacker.load();
+    //hacker.load();
     meme.load();
     commands.load();
     reminder.load(bot);
