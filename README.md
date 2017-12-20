@@ -23,7 +23,8 @@ First of all, you need to create a folder called **config**, and add to it the f
 A file called "config.json" which contains the following:
 ```json
 { 
-    "bot_token":"wzc02uaFw2SC9u1aMhaJ5RQP.DIqchQ.fir6VJJ4zO1cCNeLnvNMKwW9yCY"
+	"bot_token":"wzc02uaFw2SC9u1aMhaJ5RQP.DIqchQ.fir6VJJ4zO1cCNeLnvNMKwW9yCY",
+	"bot_prefix":"!"
 }
 ```
 
