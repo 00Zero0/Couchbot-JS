@@ -173,8 +173,8 @@ module.exports = {
 
     load: function()
     {
-        commands.reg('!runcode', runcode, 2, 'Compile and run your code');
-        commands.reg('!languages', languages, 2, 'Display all supported languages');
+        commands.reg('runcode', runcode, 2, 'Compile and run your code');
+        commands.reg('languages', languages, 2, 'Display all supported languages');
     }
 
 }

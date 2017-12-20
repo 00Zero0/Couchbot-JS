@@ -176,8 +176,8 @@ module.exports = {
 
     load: function()
     {
-      commands.reg('!search web', searchweb, 2, 'Google what you want, its ovious');
-      commands.reg('!search image', searchimage, 2, 'Google image search');
-      commands.reg('!gmeme', gmeme, 2, 'Generate a random meme');
+      commands.reg('search web', searchweb, 2, 'Google what you want, its ovious');
+      commands.reg('search image', searchimage, 2, 'Google image search');
+      commands.reg('gmeme', gmeme, 2, 'Generate a random meme');
     }
 }

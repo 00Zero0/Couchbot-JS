@@ -360,7 +360,7 @@ module.exports = {
 
     load: function(bot)
     {
-        cmd.reg('!reminder', parseCmd, 2, 'Add or Delete reminder');
+        cmd.reg('reminder', parseCmd, 2, 'Add or Delete reminder');
 
         if(fs.existsSync(FILE))
         {

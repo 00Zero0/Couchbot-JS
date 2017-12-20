@@ -88,9 +88,9 @@ module.exports = {
 
     load: function() {
         // Register commands
-        commands.reg("!timezone set", set, 2, "Sets your timezone location (UTC)");
-        commands.reg("!timezone get", get, 2, "Gets the timezone of the user, if user has specified it");
-        commands.reg("!servertime", servertime, 2, "Gets the current time of day for the specified user");
+        commands.reg("timezone set", set, 2, "Sets your timezone location (UTC)");
+        commands.reg("timezone get", get, 2, "Gets the timezone of the user, if user has specified it");
+        commands.reg("servertime", servertime, 2, "Gets the current time of day for the specified user");
 
         if(fs.existsSync(FILE)) {
             let array = JSON.parse(fs.readFileSync(FILE));

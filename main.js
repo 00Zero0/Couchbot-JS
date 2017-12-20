@@ -15,6 +15,7 @@ const bot = new Discord.Client();
 
 var botConfig = JSON.parse(fs.readFileSync('config/config.json', 'utf-8'));
 var botToken = botConfig.bot_token;
+var botPrefix = botConfig.bot_prefix;
 
 var onReady = false;
 
@@ -54,6 +55,15 @@ bot.on("ready", () => {
     console.log('Connected!');
     console.log("Bot name: " + bot.user.username);
     console.log("Bot id: " + bot.user.id);
+
+    /**You can load all the commands here i.e. before loading commands,
+       in order to load these commands without using the given prefix
+       */
+
+    //Load the commands to register the prefix
+    commands.load(botPrefix);
+
+    //Register all commands with given prefix
     rights.load();
     level.load(bot.user.id, bot.guilds.first());
     behaviour.load();
@@ -61,11 +71,10 @@ bot.on("ready", () => {
     google.load();
     hacker.load();
     meme.load();
-    commands.load();
     reminder.load(bot);
 
     // Misc
-    commands.reg("!help", commands.help, 2, "Lists all the available commands");
+    commands.reg("help", commands.help, 2, "Lists all the available commands");
     onReady = true;
 });
 
@@ -89,7 +98,7 @@ bot.on('message', msg => {
 
     // Process experience
     if (!behaviour.is_xp_blocked(msg)) {
-        level.processMessage(msg);
+        level.processMessage(msg, botPrefix);
     }
 });
 

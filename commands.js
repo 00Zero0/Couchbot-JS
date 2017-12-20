@@ -5,6 +5,7 @@ const behaviour = require("./utils/behaviour");
 // Globals
 var Message = discord.Message;
 var Commands = [];
+var cmdPrefix = "";
 
 const MAX_MSG_LEN = 2000;
 
@@ -47,12 +48,15 @@ module.exports = {
     /**
      * Load function
     */
-    load: function() {
+    load: function(prefix) {
+        //Store the command prefix
+        cmdPrefix = prefix;
+
         // Register behaviour commands
-        this.reg("!block", behaviour.output_block, 0, "Blocks the output of the current channel");
-        this.reg("!unblock", behaviour.output_unblock, 0, "Unblocks the output of the current channel");
-        this.reg("!blockxp", behaviour.xp_block, 0, "Blocks the xp counting of the current channel");
-        this.reg("!unblockxp", behaviour.xp_unblock, 0, "Unblocks the xp counting of the current channel");
+        this.reg("block", behaviour.output_block, 0, "Blocks the output of the current channel");
+        this.reg("unblock", behaviour.output_unblock, 0, "Unblocks the output of the current channel");
+        this.reg("blockxp", behaviour.xp_block, 0, "Blocks the xp counting of the current channel");
+        this.reg("unblockxp", behaviour.xp_unblock, 0, "Unblocks the xp counting of the current channel");
     },
 
     /**
@@ -99,13 +103,13 @@ module.exports = {
     reg: function(sig, func, perms, desc) {
         // Check types
         Commands.forEach(function(cmd) {
-            if(cmd.signature == sig) {
+            if(cmd.signature == cmdPrefix + sig) {
                 console.error("Command with signature '" + sig + "' already exists");
                 return false;
             }
         });
         Commands.push({
-            signature: sig,
+            signature: cmdPrefix + sig,
             function: func,
             permissions: perms,
             description: desc

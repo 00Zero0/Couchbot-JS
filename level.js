@@ -585,13 +585,13 @@ module.exports = {
 
     load: function(id, bot_guild) {
         // Register commands
-        commands.reg("!status", status, 2, "Displays the status of the user");
-        commands.reg("!top", top, 2, "Displays the top users");
-        commands.reg("!givexp", givexp, 0, "Gives the specified amount of xp to the user");
-        commands.reg("!takexp", takexp, 0, "Takes the specified amount of xp from the user");
-        commands.reg("!setnotification", setNotificationChannel, 0, "Blocks the output of the current channel");
-        commands.reg("!clearnotification", clearNotificationChannel, 0, "Clears the channel in which notifications take place");
-        commands.reg("!restore", restore, 0, "Restores a user which has lost his level");
+        commands.reg("status", status, 2, "Displays the status of the user");
+        commands.reg("top", top, 2, "Displays the top users");
+        commands.reg("givexp", givexp, 0, "Gives the specified amount of xp to the user");
+        commands.reg("takexp", takexp, 0, "Takes the specified amount of xp from the user");
+        commands.reg("setnotification", setNotificationChannel, 0, "Blocks the output of the current channel");
+        commands.reg("clearnotification", clearNotificationChannel, 0, "Clears the channel in which notifications take place");
+        commands.reg("restore", restore, 0, "Restores a user which has lost his level");
 
         if(fs.existsSync(FILE_PATH)) {
             level_data = JSON.parse(fs.readFileSync(FILE_PATH));
@@ -626,8 +626,8 @@ module.exports = {
     /**
      * @param {Message} msg
      */
-    processMessage: function(msg) {
-        if(msg.content.startsWith("!")) 
+    processMessage: function(msg, prefix) {
+        if(msg.content.startsWith(prefix)) 
             return;
     
         for(user in user_data) {

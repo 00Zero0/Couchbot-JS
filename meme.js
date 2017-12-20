@@ -139,7 +139,7 @@ module.exports = {
     load: function()
     {
         //The register the command
-        commands.reg('!meme', meme, 2, 'Generates memes and places profile of user mentioned');
+        commands.reg('meme', meme, 2, 'Generates memes and places profile of user mentioned');
 
         //Add all memes here
         addMeme('hitler', [46, 33], [242, 250] );
