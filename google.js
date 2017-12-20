@@ -26,7 +26,7 @@ async function searchweb(message)
     var searchPhrase = content.match(re)?content.match(re)[1]:"";
     if(searchPhrase.length<1)
     {
-      message.channel.send('Syntax Incorrect! Please type : `!search web "*your search* "`');
+      message.channel.send('Syntax Incorrect! Please type : `' + commands.getPrefix() + 'search web "*your search* "`');
       return;
     }
 
@@ -89,7 +89,7 @@ async function searchimage(message)
   var searchPhrase = content.match(re)?content.match(re)[1]:"";
   if(searchPhrase.length<1)
   {
-    message.channel.send('Syntax Incorrect! Please type : `!search image "*your search* "`');
+    message.channel.send('Syntax Incorrect! Please type : `' + commands.getPrefix() + 'search image "*your search* "`');
     return;
   }
 
@@ -139,7 +139,7 @@ async function gmeme(message)
   var re = /"([^]+)"/;
   if(!content.match(re) && content.length>8)
   {
-    message.channel.send('Error syntax, please type: `!gmeme "meme-name"` , you may ignore the "meme-name" to generate a random meme');
+    message.channel.send('Error syntax, please type: `' + commands.getPrefix + 'gmeme "meme-name"` , you may ignore the "meme-name" to generate a random meme');
     return;
   }
   var searchPhrase = content.match(re)?content.match(re)[1] + ' memes':'';

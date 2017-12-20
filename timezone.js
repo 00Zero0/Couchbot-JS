@@ -25,7 +25,7 @@ function set(msg) {
     //Check if given time is valid
     var timezone = msg.content.match(/\s(-?)(((0?)([0-9]))|(10|11)):[0-5][0-9]/g);
     if(timezone == null){
-        msg.channel.send("Timezone is not valid. Please type `!timezone set hh:mm`");
+        msg.channel.send("Timezone is not valid. Please type `" + commands.getPrefix() + "timezone set hh:mm`");
         return;
     }
     var userID = msg.author.id;
@@ -49,7 +49,7 @@ function get(msg) {
         return;
     }
     if(words.length < 3) {
-        msg.channel.send("Please specify user. Type: `!timezone get mention_user/user_name`");
+        msg.channel.send("Please specify user. Type: `" + commands.getPrefix() + "timezone get mention_user/user_name`");
         return;
     }
     var username = words[2];

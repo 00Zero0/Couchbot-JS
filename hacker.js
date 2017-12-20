@@ -5,7 +5,7 @@ const hackerEarth = require('hackerearth-node');
 
 const commands = require("./commands");
 
-var configH = JSON.parse(fs.readFileSync('config/compiler.json', 'utf-8'));
+var configH = JSON.parse(fs.readFileSync('config/compiler.json'));
 
 //Search configuration
 const SECRET_KEY_H = configH.secret_key;
@@ -26,7 +26,7 @@ async function runcode(message)
     var code = content.match(/```([^]+)```/);
     if(!code)
     {
-        message.channel.send('Syntax error, please use: `!runcode \\`\\`\\`*lan*\n*Your Code*\n\\`\\`\\` in\\`*Your input*\\``\nYou may omit the input (in)');
+        message.channel.send('Syntax error, please use: `' + commands.getPrefix() + 'runcode \\`\\`\\`*lan*\n*Your Code*\n\\`\\`\\` in\\`*Your input*\\``\nYou may omit the input (in)');
         return;
     }
     code = code[1];
@@ -38,7 +38,7 @@ async function runcode(message)
     var lan = content.match(regex);
     if(!lan)
     {
-        message.channel.send('This language in not supported, type `!languages` to get list of all suported languages');
+        message.channel.send('This language in not supported, type `' + commands.getPrefix() + 'languages` to get list of all suported languages');
         return;
     }
     lan = lan[1];

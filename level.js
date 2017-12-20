@@ -250,7 +250,7 @@ function status(msg) {
         return;
     }
     
-    if (msg.content.toLowerCase() == "!status" || msg.content.toLowerCase() == "!status "){
+    if (msg.content.toLowerCase() == commands.getPrefix() + "status" || msg.content.toLowerCase() == commands.getPrefix() + "status "){
         // Workaround: 'msg.member' is occasionally null then user is invisible (appears offline)
         let member = msg.guild.members.find("id", msg.author.id);
         if (!member)
@@ -320,7 +320,7 @@ function top(msg) {
     let data = msg.content.split(" ");
 
     if(data.length < 2) {
-        msg.channel.send("Syntax incorrect! Please type : `!top *number*`");
+        msg.channel.send("Syntax incorrect! Please type : `" + commands.getPrefix() + "top *number*`");
         return;
     }
     if(data.length >= 3) {
@@ -328,7 +328,7 @@ function top(msg) {
         let amount2 = Math.max(Math.min(parseInt(data[2]), 30), 1);
 
         if(isNaN(amount1) || isNaN(amount2)) {
-            msg.channel.send("Syntax incorrect! Please type : `!top *number*`");
+            msg.channel.send("Syntax incorrect! Please type : `" + commands.getPrefix() + "top *number*`");
             return;
         }
 
@@ -358,7 +358,7 @@ function top(msg) {
     }
     let amount = Math.max(Math.min(parseInt(data[1]), 30), 1);
     if(isNaN(amount)){
-        msg.channel.send("Syntax incorrect! Please type : `!top *number*`");
+        msg.channel.send("Syntax incorrect! Please type : `" + commands.getPrefix() + "top *number*`");
         return;
     }
 

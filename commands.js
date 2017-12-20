@@ -45,6 +45,10 @@ function compileCommands(useDesc, hasRight) {
 
 module.exports = {
 
+    getPrefix: function(){
+        return cmdPrefix;
+    },
+
     /**
      * Load function
     */
@@ -66,14 +70,14 @@ module.exports = {
     help: function(msg) {
         let argv = msg.content;
         if (argv.length > 6) {
-            argv = argv.replace('!help', '');
+            argv = argv.replace(cmdPrefix + 'help', '');
             argv = argv.split(',');
             let text = "";
             for (i in argv) {
                 let arg = argv[i];
                 for (j in Commands) {
                     let cmd = Commands[j];
-                    if (cmd.signature.replace('!', '') == arg.replace('!', '').trim()) {
+                    if (cmd.signature.replace(cmdPrefix, '') == arg.replace(cmdPrefix, '').trim()) {
                         text += "\n" + cmd.signature + " : *" + cmd.description + "*";
                     }
                 }

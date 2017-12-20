@@ -349,11 +349,11 @@ function chkReminder(bot)
 function errMsg(channel)
 {
     channel.send('Syntax Error.' + 
-    'To add reminder for you please type \n ```!reminder add [m]m-dd hh:mm [title, description]```' +
-    'To add reminder for channel please type \n ```!reminder channel [m]m-dd hh:mm [title, description]```' + 
+    'To add reminder for you please type \n ```' + cmd.getPrefix() + 'reminder add [m]m-dd hh:mm [title, description]```' +
+    'To add reminder for channel please type \n ```' + cmd.getPrefix() + 'reminder channel [m]m-dd hh:mm [title, description]```' + 
     'you can omit the `[m]m-dd` to set reminder for this day' +
-    '\n To remove reminder please type \n ```!reminder del [title]``` ' + 
-    '\n To see all your reminders, type \n ```!reminder all\nOR\n!reminder all-channel``` ');
+    '\n To remove reminder please type \n ```' + cmd.getPrefix() + 'reminder del [title]``` ' + 
+    '\n To see all your reminders, type \n ```' + cmd.getPrefix() + 'reminder all\nOR\n' + cmd.getPrefix() + 'reminder all-channel``` ');
 }
 
 module.exports = {
