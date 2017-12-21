@@ -61,7 +61,7 @@ bot.on("ready", () => {
        */
 
     //Load the commands to register the prefix
-    commands.load(botPrefix);
+    commands.setPrefix(botPrefix);
 
     //Register all commands with given prefix
     rights.load();
@@ -72,6 +72,7 @@ bot.on("ready", () => {
     hacker.load();
     meme.load();
     reminder.load(bot);
+    commands.load();
 
     // Misc
     commands.reg("help", commands.help, 2, "Lists all the available commands");

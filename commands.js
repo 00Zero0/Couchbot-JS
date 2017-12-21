@@ -49,13 +49,14 @@ module.exports = {
         return cmdPrefix;
     },
 
+    setPrefix: function(prefix){
+        cmdPrefix = prefix;
+    },
+
     /**
      * Load function
     */
-    load: function(prefix) {
-        //Store the command prefix
-        cmdPrefix = prefix;
-
+    load: function() {
         // Register behaviour commands
         this.reg("block", behaviour.output_block, 0, "Blocks the output of the current channel");
         this.reg("unblock", behaviour.output_unblock, 0, "Unblocks the output of the current channel");
