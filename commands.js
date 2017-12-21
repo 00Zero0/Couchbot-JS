@@ -51,6 +51,7 @@ module.exports = {
 
     setPrefix: function(prefix){
         cmdPrefix = prefix;
+        console.log('Prefix has been set as :: ' + cmdPrefix);
     },
 
     /**
@@ -109,7 +110,7 @@ module.exports = {
         // Check types
         Commands.forEach(function(cmd) {
             if(cmd.signature == cmdPrefix + sig) {
-                console.error("Command with signature '" + sig + "' already exists");
+                console.error("Command with signature '" + cmdPrefix + sig + "' already exists");
                 return false;
             }
         });
@@ -119,7 +120,7 @@ module.exports = {
             permissions: perms,
             description: desc
         });
-        console.log("Registered command '%s'", sig);
+        console.log("Registered command '%s'", cmdPrefix + sig);
         return true;
     },
     
