@@ -12,27 +12,6 @@ const MAX_DESC_LEN = 100;
 
 var data = [];
 
-//Function to return localtime of user in string format
-function getlocaltime(id)
-{
-    var userTime = localtime.getData(id);
-    //Today's time for the user
-    userTime = userTime.toString().split(":");
-    let date = new Date();
-    let hours = parseInt(userTime[0], 10);
-    let minutes = date.getUTCMinutes() + parseInt(userTime[1], 10);
-    while (minutes >= 60) {
-      hours += 1;
-      minutes -= 60;
-    }
-    hours = date.getUTCHours() + hours;
-    while (hours >= 24) {
-      hours -= 24;
-    }
-    today_time = hours + ":" + (minutes < 10 ? "0" : "") + minutes;
-    return today_time;
-}
-
 function saveReminder()
 {
     fs.writeFileSync(FILE, JSON.stringify(data));
@@ -110,7 +89,7 @@ function parseCmd(message)
           var date = message.content.match(/\s(((10|11|12)|([1-9]))-([0-3][0-9]))/g);
           let dateData = new Date();
           if (date == null) {
-            date = dateData.getMonth() + 1 + "-" + dateData.getDate();
+            date = (dateData.getMonth() + 1) + "-" + dateData.getDate();
           } else {
             date = date[0];
             date = date.trim();
@@ -118,7 +97,7 @@ function parseCmd(message)
 
           //If the date is from past
           var mths_int = parseInt(date.slice(0, 2));
-          if (mths_int < dateData.getMonth() + 1) {
+          if (mths_int < (dateData.getMonth() + 1)) {
             message.reply("You live in the past? :joy: ");
             return;
           }
@@ -133,13 +112,15 @@ function parseCmd(message)
           time = time.trim();
 
           //If the time is from past
-          let array_time = time.split(':'); //given time
-          let user_time = getlocaltime(userId).split(':');  //user local time
-          if (array_time[0] < user_time[0]) {
-            message.reply("You are late for the reminder itself :joy: ");
-          }
-          if (array_time[1] < user_time[1]) {
-            message.reply("You are late for the reminder itself :joy: ");
+          {
+            let array_time = time.split(':'); //given time
+            let user_time = localtime.getlocaltime(userId).split(':');  //user local time
+            let mins_now = parseInt(user_time[0]) * 60 + parseInt(user_time[1]);
+            let mins_given = parseInt(array_time[0]) * 60 + parseInt(array_time[1]);
+            if(mins_now>mins_given){
+                message.reply("You are late for the reminder itself :joy: ");
+                return;
+            }
           }
 
           //Get title and message
@@ -212,13 +193,15 @@ function parseCmd(message)
           time = time.trim();
 
           //If the time is from past
-          let array_time = time.split(":"); //given time
-          let server_time = [dateData.getHours(), dateData.getMinutes()]; //server local time
-          if (array_time[0] < server_time[0]) {
-            message.reply("You are late for the reminder itself :joy: ");
-          }
-          if (array_time[1] < server_time[1]) {
-            message.reply("You are late for the reminder itself :joy: ");
+          {
+            let array_time = time.split(":"); //given time
+            let user_time = localtime.getlocaltime(userId).split(":"); //user local time
+            let mins_now = parseInt(user_time[0]) * 60 + parseInt(user_time[1]);
+            let mins_given = parseInt(array_time[0]) * 60 + parseInt(array_time[1]);
+            if (mins_now > mins_given) {
+              message.reply("You are late for the reminder itself :joy: ");
+              return;
+            }
           }
 
           //Get title and message
@@ -279,7 +262,7 @@ function parseCmd(message)
                 message.reply('Your reminder with title : "' + title + '" has been deleted');
             else if(rights.hasRights(message.author)<2)
             {
-                if(del(message.channel, title))
+                if(del(message.channel.id, title))
                     message.channel.send('The reminder with title : "' + title + '" has been deleted');
                 else
                     message.reply('Your reminder with title : "' + title + '" has not been added yet :joy: ');    
@@ -329,7 +312,7 @@ function chkReminder(bot)
             //Today's date
             today_date = (dateData.getMonth()+1) + '-' + dateData.getDate();
             //Today's time for the user
-            today_time = getlocaltime(user.id);
+            today_time = localtime.getlocaltime(user.id);
             isChannel = false;
         }
     
