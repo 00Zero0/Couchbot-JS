@@ -10,6 +10,7 @@ const google = require("./google");
 const hacker = require("./hacker");
 const meme = require("./meme");
 const reminder = require("./reminder");
+const timer = require("./timer");
 
 const bot = new Discord.Client();
 
@@ -72,6 +73,7 @@ bot.on("ready", () => {
     hacker.load();
     meme.load();
     reminder.load(bot);
+    timer.load(bot);
     commands.load();
 
     // Misc
