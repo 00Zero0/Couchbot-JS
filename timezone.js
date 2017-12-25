@@ -86,6 +86,26 @@ module.exports = {
         return userData[id];
     },
 
+    //Function to return localtime of user in string format
+    getlocaltime: function(id){
+        var userTime = this.getData(id);
+        //Today's time for the user
+        userTime = userTime.toString().split(":");
+        let date = new Date();
+        let hours = parseInt(userTime[0], 10);
+        let minutes = date.getUTCMinutes() + parseInt(userTime[1], 10);
+        while (minutes >= 60) {
+          hours += 1;
+          minutes -= 60;
+        }
+        hours = date.getUTCHours() + hours;
+        while (hours >= 24) {
+          hours -= 24;
+        }
+        today_time = hours + ":" + (minutes < 10 ? "0" : "") + minutes;
+        return today_time;
+    },
+
     load: function() {
         // Register commands
         commands.reg("timezone set", set, 2, "Sets your timezone location (UTC)");
