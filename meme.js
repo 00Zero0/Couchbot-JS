@@ -24,7 +24,7 @@ function meme(message)
             message.channel.send('No memes available');
         else
         {
-            var header = 'Type : `' + commands.getPrefix() + 'meme meme-name mention-user` to use memes\nHere are the list of all memes you can use:\n';
+            var header = 'Type : ` ' + commands.getPrefix() + 'meme meme-name mention-user` to use memes\nHere are the list of all memes you can use:\n';
             message.channel.send(header + all_memes);
         }
         return;
@@ -33,7 +33,7 @@ function meme(message)
     var users = message.mentions.users //Check if they have mentioned users
     if(users.first()==undefined || users.first()==null)
     {
-        message.channel.send('User not mentioned, please type: `' + commands.getPrefix() + 'meme meme-name mention-user[s]`');
+        message.channel.send('User not mentioned, please type: ` ' + commands.getPrefix() + 'meme meme-name mention-user[s]`');
         return;
     }
 
@@ -48,7 +48,7 @@ function meme(message)
             return;
         }
     }
-    message.channel.send('This meme is not present, type: `' + commands.getPrefix + 'meme` to get list of all memes');
+    message.channel.send('This meme is not present, type: ` ' + commands.getPrefix() + 'meme` to get list of all memes');
 }
 
 async function sendMeme(meme, users, message)
