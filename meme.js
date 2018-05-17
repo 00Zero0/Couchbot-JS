@@ -168,6 +168,10 @@ module.exports = {
         addMeme('programmer-lan', [598, 148], [704, 304], [256, 256], [357, 368]);
         addMeme('password-problem', [113, 94], [251, 292]);
         addMeme('shadow-programmer', [379, 110], [472, 278]);
+		addMeme('rasengan', [182, 45], [223, 103], [197, 169], [238, 207]);
+		addMeme('1000-years-of-death', [34, 34], [66, 77], [286, 157], [320, 183]);
+		//addMeme('sakar', [1, 1], [10, 10]);
+		
     }
 
 }
